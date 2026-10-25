@@ -1,0 +1,45 @@
+[package]
+name = "privatus-analytics"
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.75"
+description = "Prints the cookieless Privatus Analytics script tag, event and click map attributes, and page props for Rust web apps. Optional axum and actix-web middleware, askama and maud support."
+license = "MIT"
+authors = ["Two Phase LLC"]
+homepage = "https://privatusanalytics.com"
+documentation = "https://docs.rs/privatus-analytics"
+repository = "https://github.com/Privatus-Analytics/rust"
+readme = "README.md"
+keywords = ["analytics", "privacy", "cookieless", "axum", "actix-web"]
+categories = ["web-programming", "template-engine"]
+include = ["src/**/*.rs", "tests/**/*.rs", "Cargo.toml", "README.md", "CHANGELOG.md", "LICENSE"]
+
+[lib]
+name = "privatus_analytics"
+
+[features]
+default = []
+axum = ["dep:axum", "dep:tower-layer", "dep:tower-service"]
+actix = ["dep:actix-web"]
+askama = ["dep:askama"]
+maud = ["dep:maud"]
+
+[dependencies]
+axum = { version = "0.8", optional = true, default-features = false }
+tower-layer = { version = "0.3", optional = true }
+tower-service = { version = "0.3", optional = true }
+actix-web = { version = "4", optional = true, default-features = false }
+askama = { version = "0.16", optional = true, default-features = false, features = ["std"] }
+maud = { version = "0.27", optional = true }
+
+[dev-dependencies]
+actix-web = { version = "4", default-features = false, features = ["macros"] }
+askama = "0.16"
+axum = { version = "0.8", default-features = false }
+maud = "0.27"
+tokio = { version = "1", features = ["macros", "rt"] }
+tower = { version = "0.5", default-features = false, features = ["util"] }
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
