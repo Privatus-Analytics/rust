@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Events</h1>
+<button type="button" {{ export }}>Export report</button>
+<p><a href="#pricing" {{ cta }}>Pricing</a></p>
+<form action="/event" method="get" {{ signup }}>
+  <button type="submit">Sign up</button>
+</form>
+{% endblock %}

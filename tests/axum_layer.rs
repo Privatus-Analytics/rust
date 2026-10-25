@@ -109,6 +109,14 @@ async fn does_nothing_when_disabled_or_auto_inject_is_off() {
     )
     .await;
     assert_eq!(body, PAGE);
+
+    // Off with the queue stub on still adds nothing, not even the stub.
+    let (_, body) = fetch(
+        app(PrivatusLayer::new(config().enabled(false).queue_stub(true))),
+        get_request("/"),
+    )
+    .await;
+    assert_eq!(body, PAGE);
 }
 
 #[tokio::test]

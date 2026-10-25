@@ -231,3 +231,50 @@ fn inject_tag_puts_the_tag_before_head() {
         None
     );
 }
+
+// When the tag is off, only the queue stub prints (if it is on), so
+// privatus.track calls in your own JavaScript never fail.
+
+#[test]
+fn off_with_the_queue_stub_prints_only_the_stub_with_the_nonce() {
+    let html = config()
+        .enabled(false)
+        .queue_stub(true)
+        .props(props! { "plan" => "pro" })
+        .tag()
+        .nonce("abc")
+        .to_string();
+    assert_eq!(
+        html,
+        format!(r#"<script nonce="abc">{QUEUE_STUB}</script>"#)
+    );
+}
+
+#[test]
+fn off_without_the_queue_stub_prints_nothing() {
+    let html = config()
+        .enabled(false)
+        .queue_stub(false)
+        .tag()
+        .props(props! { "plan" => "pro" })
+        .nonce("abc")
+        .to_string();
+    assert_eq!(html, "");
+}
+
+#[test]
+fn no_site_id_with_the_queue_stub_prints_only_the_stub() {
+    let html = Config::new()
+        .enabled(true)
+        .site_id(" ")
+        .tag()
+        .queue_stub(true)
+        .props(props! { "plan" => "pro" })
+        .to_string();
+    assert_eq!(html, format!("<script>{QUEUE_STUB}</script>"));
+}
+
+#[test]
+fn will_render_is_about_the_tracker_not_the_stub() {
+    assert!(!config().enabled(false).queue_stub(true).tag().will_render());
+}

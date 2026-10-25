@@ -1,0 +1,15 @@
+# The conformance example app (axum + askama). It uses the crate from this
+# repo's own source (the path dependency below), not from crates.io.
+[package]
+name = "privatus-analytics-example"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[workspace]
+
+[dependencies]
+privatus-analytics = { path = "..", features = ["axum", "askama"] }
+askama = "0.16"
+axum = "0.8"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net"] }

@@ -105,7 +105,7 @@ In a release build it prints:
 ```
 
 The tag prints nothing when there is no site id, and nothing in debug builds
-(see below). If your app uses a Content Security Policy nonce, pass it with
+(see below), except the queue stub when you turn it on. If your app uses a Content Security Policy nonce, pass it with
 `analytics.tag().nonce(nonce)`.
 
 ### Or let the middleware add it
@@ -209,6 +209,11 @@ ignores `localhost` unless you pass `data-allow-local` or `data-debug` (see
 ```rust
 let analytics = analytics.enabled(true).extra_attribute("data-debug", "true");
 ```
+
+If `queue_stub` is on, the tag still prints the small queue stub (and nothing
+else), so `privatus.track` calls in your own JavaScript keep working. They
+wait in a queue and are never sent. The middleware adds nothing when the tag
+is off.
 
 ### Leaving people out
 
@@ -380,9 +385,12 @@ sends them once the tracker is ready:
 let analytics = analytics.queue_stub(true);
 ```
 
-or for one page: `analytics.tag().queue_stub(true)`. Like the tag, the stub
-prints only where the tag is on, so in development use
-`window.privatus && privatus.track(...)`.
+or for one page: `analytics.tag().queue_stub(true)`.
+
+The stub prints even when the tag is off (in debug builds, without a site id,
+or with `.enabled(false)`). Only the stub prints then: no tracker and no page
+props. So your `privatus.track` calls never fail; they wait in the queue and
+are never sent.
 
 ### See the results
 
@@ -408,6 +416,15 @@ and props helpers only print HTML attributes and a small script. Keep people
 out of your props and event props: no names, emails or user ids. See the
 [privacy documentation](https://privatusanalytics.com/docs/privacy) for what is
 collected.
+
+If you have a privacy policy, it should say which tools handle your visitors' data. You can paste this:
+
+> This website uses [Privatus Analytics](https://privatusanalytics.com/privacy-analytics) to count visits. It
+> does not use cookies and does not follow you from one website to another. Your IP address is used for a moment
+> to count visits and is never stored.
+
+Change it to fit your site. The [privacy policy generator](https://privatusanalytics.com/tools/privacy-policy-generator)
+makes a longer version with your site's name in it.
 
 ## Development
 

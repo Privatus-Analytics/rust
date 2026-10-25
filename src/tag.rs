@@ -154,7 +154,8 @@ impl<'a> Tag<'a> {
         &self.config
     }
 
-    /// Whether anything prints: there is a site id and the tag is on.
+    /// Whether the tracker prints: there is a site id and the tag is on. When
+    /// this is false, [`Tag::to_html`] prints at most the queue stub.
     pub fn will_render(&self) -> bool {
         self.config.is_enabled() && self.config.resolved_site_id().is_some()
     }
@@ -216,10 +217,17 @@ impl<'a> Tag<'a> {
     }
 
     /// The HTML: the queue stub (when on), the page props script (when there
-    /// are props), then the tracker tag, one per line. Empty when the tag is
-    /// off or there is no site id.
+    /// are props), then the tracker tag, one per line.
+    ///
+    /// When the tag is off or there is no site id, it is only the queue stub
+    /// (when on, with the nonce), so `privatus.track` calls in your own
+    /// JavaScript never fail; or empty when the stub is off. No tracker and no
+    /// page props script print then.
     pub fn to_html(&self) -> SafeHtml {
         if !self.will_render() {
+            if self.config.wants_queue_stub() {
+                return SafeHtml::from_trusted(self.inline_script(QUEUE_STUB));
+            }
             return SafeHtml::default();
         }
         let props_json = page_props_json(self.page_props());
