@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 - 2026-10-26
+
+- README: a new intro that starts with the problem Privatus Analytics solves.
+
 ## 1.0.0 - 2026-10-25
 
 - Initial release.
