@@ -1,14 +1,5 @@
 # Changelog
 
-## Unreleased
-
-- When the tag is off (not enabled, a debug build by default, or no site id) and
-  the queue stub is on, `Tag::to_html` prints only the queue stub (with the nonce),
-  so `privatus.track` calls never fail. No tracker and no page props script print
-  then. The axum and actix-web middleware still add nothing when the tag is off.
-- Add the conformance example app in `example/` (axum and askama).
-- README: a privacy policy paragraph you can paste.
-
 ## 1.0.0 - 2026-10-25
 
 - Initial release.
@@ -27,3 +18,9 @@
 - Feature `actix`: `PrivatusMiddleware` for actix-web.
 - Features `askama` and `maud`: the helpers print as HTML in those template
   engines.
+- When the tag is off (not enabled, a debug build by default, or no site id) and
+  the queue stub is on, `Tag::to_html` prints only the queue stub (with the nonce),
+  so `privatus.track` calls never fail. No tracker and no page props script print
+  then. The axum and actix-web middleware still add nothing when the tag is off.
+- Add the conformance example app in `example/` (axum and askama).
+- README: a privacy policy paragraph you can paste.
